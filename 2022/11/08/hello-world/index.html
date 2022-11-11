@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/img/ava.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -26,9 +26,9 @@
 <meta property="og:image" content="http://example.com/blogImg/ArrayList01.png">
 <meta property="og:image" content="http://example.com/blogImg/vector-01.png">
 <meta property="article:published_time" content="2022-11-08T12:48:12.765Z">
-<meta property="article:modified_time" content="2022-11-09T23:12:37.781Z">
+<meta property="article:modified_time" content="2022-11-11T03:52:37.613Z">
 <meta property="article:author" content="code">
-<meta property="article:tag" content="java集合">
+<meta property="article:tag" content="java">
 <meta property="article:tag" content="源码">
 <meta property="article:tag" content="HashMap">
 <meta name="twitter:card" content="summary_large_image">
@@ -74,7 +74,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":50,"cursorChar":" ","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -177,7 +177,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">java常见集合扩容原理</span>
+            <span id="subtitle" data-typed-text="java常见集合扩容原理"></span>
           
         </div>
 
@@ -209,7 +209,7 @@
         
         
         
-          116 分钟
+          46 分钟
         
       </span>
     
@@ -253,11 +253,9 @@
               <div class="markdown-body">
                 
                 <blockquote>
-<p>本文只选取了常见的几个Collection和Map。[ArrayList,LinkedList,Vector,HashMap]</p>
-<p>说明：</p>
-<p>​    1.本文说的类结构代码均直接copy自jdk1.8源代码，且只截取了需要用到的部分</p>
+<p>选取了[ArrayList,Vector,HashMap]进行简单说明</p>
 </blockquote>
-<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><h3 id="1-ArrayList"><a href="#1-ArrayList" class="headerlink" title="1.ArrayList:"></a>1.ArrayList:</h3><h4 id="1-1-ArrayList类的基本属性"><a href="#1-1-ArrayList类的基本属性" class="headerlink" title="1.1 ArrayList类的基本属性"></a>1.1 ArrayList类的基本属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">ArrayList&#123;<br>    <span class="hljs-comment">//共享空数组实例用于默认大小的空实例 用于无参构造时候给elementData实例化</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;<br>    <span class="hljs-comment">//共享空数组实例用于默认大小的空实例 用于指定初始容量构造时给elementData实例化</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;<br>    <br>    <span class="hljs-comment">//数组的默认容量，第一次扩容时会使用到</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;<br>    <span class="hljs-comment">//这个是真正用来存放list数据的数组</span><br>    <span class="hljs-keyword">transient</span> Object[] elementData;<br>    <br>    <span class="hljs-comment">//存放ArrayList的大小</span><br>     <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> size;<br>    <span class="hljs-comment">//记录list被修改的次数</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">transient</span> <span class="hljs-type">int</span> <span class="hljs-variable">modCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <br>&#125; <br></code></pre></td></tr></table></figure>
+<h3 id="1-ArrayList"><a href="#1-ArrayList" class="headerlink" title="1.ArrayList:"></a>1.ArrayList:</h3><h4 id="1-1-ArrayList类的基本属性"><a href="#1-1-ArrayList类的基本属性" class="headerlink" title="1.1 ArrayList类的基本属性"></a>1.1 ArrayList类的基本属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">ArrayList&#123;<br>    <span class="hljs-comment">//共享空数组实例用于默认大小的空实例 用于无参构造时候给elementData实例化</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;<br>    <span class="hljs-comment">//共享空数组实例用于默认大小的空实例 用于指定初始容量构造时给elementData实例化</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;<br>    <br>    <span class="hljs-comment">//数组的默认容量，第一次扩容时会使用到</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;<br>    <span class="hljs-comment">//这个是真正用来存放list数据的数组</span><br>    <span class="hljs-keyword">transient</span> Object[] elementData;<br>    <br>    <span class="hljs-comment">//存放ArrayList的大小</span><br>     <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> size;<br>    <span class="hljs-comment">//记录list被修改的次数</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">transient</span> <span class="hljs-type">int</span> <span class="hljs-variable">modCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <br>&#125; <br></code></pre></td></tr></table></figure>
 
 
 
@@ -287,10 +285,10 @@
 
 <p><img src="/blogImg/vector-01.png" srcset="/img/loading.gif" lazyload alt="vector-01"></p>
 <hr>
-<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><blockquote>
+<blockquote>
 <p>既是集合，那么集合的特征就是不重复无序。</p>
 </blockquote>
-<h3 id="3-HashSet"><a href="#3-HashSet" class="headerlink" title="3.HashSet"></a>3.HashSet</h3><h4 id="3-1-基本属性"><a href="#3-1-基本属性" class="headerlink" title="3.1 基本属性"></a>3.1 基本属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java">HashSet&#123;<br>    <span class="hljs-comment">//final类型的Object，充当map中的值。</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Object</span> <span class="hljs-variable">PRESENT</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>    <span class="hljs-comment">//节点数组，记住下面的所有table都是这个成员变量，是用来存放数据的。（因为有很多局部变量）</span><br>    <span class="hljs-keyword">transient</span> Node&lt;K,V&gt;[] table;<br>    <span class="hljs-comment">//默认的容量</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_INITIAL_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">//加载因子</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">float</span> <span class="hljs-variable">DEFAULT_LOAD_FACTOR</span> <span class="hljs-operator">=</span> <span class="hljs-number">0.75f</span>;<br>    <span class="hljs-comment">//阈值，即table长度达到这个值后就会扩容</span><br>    <span class="hljs-type">int</span> threshold;<br>    <span class="hljs-comment">//链表转红黑树的阈值</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">TREEIFY_THRESHOLD</span> <span class="hljs-operator">=</span> <span class="hljs-number">8</span>;<br>    <span class="hljs-comment">//树化的最小条件</span><br>     <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">MIN_TREEIFY_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">64</span>;<br>    <br>    <span class="hljs-comment">//静态内部类Node的定义</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>&lt;K,V&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Map</span>.Entry&lt;K,V&gt; &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> hash;<br>        <span class="hljs-keyword">final</span> K key;<br>        V value;<br>        Node&lt;K,V&gt; next;<br><br>        Node(<span class="hljs-type">int</span> hash, K key, V value, Node&lt;K,V&gt; next) &#123;<br>            <span class="hljs-built_in">this</span>.hash = hash;<br>            <span class="hljs-built_in">this</span>.key = key;<br>            <span class="hljs-built_in">this</span>.value = value;<br>            <span class="hljs-built_in">this</span>.next = next;<br>        &#125;<br>    &#125;<br>    <br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="3-HashSet-HashMap"><a href="#3-HashSet-HashMap" class="headerlink" title="3.HashSet/HashMap"></a>3.HashSet/HashMap</h3><h4 id="3-1-基本属性"><a href="#3-1-基本属性" class="headerlink" title="3.1 基本属性"></a>3.1 基本属性</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java">HashSet&#123;<br>    <span class="hljs-comment">//final类型的Object，充当map中的值。</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Object</span> <span class="hljs-variable">PRESENT</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br>    <span class="hljs-comment">//节点数组，记住下面的所有table都是这个成员变量，是用来存放数据的。（因为有很多局部变量）</span><br>    <span class="hljs-keyword">transient</span> Node&lt;K,V&gt;[] table;<br>    <span class="hljs-comment">//默认的容量</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">DEFAULT_INITIAL_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">4</span>;<br>    <span class="hljs-comment">//加载因子</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">float</span> <span class="hljs-variable">DEFAULT_LOAD_FACTOR</span> <span class="hljs-operator">=</span> <span class="hljs-number">0.75f</span>;<br>    <span class="hljs-comment">//阈值，即table长度达到这个值后就会扩容</span><br>    <span class="hljs-type">int</span> threshold;<br>    <span class="hljs-comment">//链表转红黑树的阈值</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">TREEIFY_THRESHOLD</span> <span class="hljs-operator">=</span> <span class="hljs-number">8</span>;<br>    <span class="hljs-comment">//树化的最小条件</span><br>     <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">MIN_TREEIFY_CAPACITY</span> <span class="hljs-operator">=</span> <span class="hljs-number">64</span>;<br>    <br>    <span class="hljs-comment">//静态内部类Node的定义</span><br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>&lt;K,V&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Map</span>.Entry&lt;K,V&gt; &#123;<br>        <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> hash;<br>        <span class="hljs-keyword">final</span> K key;<br>        V value;<br>        Node&lt;K,V&gt; next;<br><br>        Node(<span class="hljs-type">int</span> hash, K key, V value, Node&lt;K,V&gt; next) &#123;<br>            <span class="hljs-built_in">this</span>.hash = hash;<br>            <span class="hljs-built_in">this</span>.key = key;<br>            <span class="hljs-built_in">this</span>.value = value;<br>            <span class="hljs-built_in">this</span>.next = next;<br>        &#125;<br>    &#125;<br>    <br>    <br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
@@ -325,6 +323,9 @@
 </ul>
 <h6 id="两个小demo："><a href="#两个小demo：" class="headerlink" title="两个小demo："></a>两个小demo：</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">1.</span>如果想要debug查看map元素添加时候触发链表和树化，那么就要tal上的元素满足hash相同，但是equals方法结果不同。所以我们重写hashCode方法。但是不重写equals方法。<span class="hljs-comment">//该方法来自于韩顺平老师的bilibili课程，java基础！</span><br> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestMap</span>&#123;<br>    <span class="hljs-keyword">private</span> String value;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">TestMap</span><span class="hljs-params">(String value)</span>&#123;<br>        <span class="hljs-built_in">this</span>.value=value;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getValue</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> value;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">hashCode</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-number">2.</span>在resize方法中，有一段tab表拷贝的方法。里面涉及到了如何将链表挂载到新的tab表上去。下面这段代码，刚好有个索引处挂载了<br>    一条链条，且该链表只有两个元素。非常适合用于debug。（说来神奇，就是自己debug时候写的代码，竟然出现了个hash冲突，才有了链表）<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>  &#123;<br>       HashSet&lt;String&gt; hashSet=<span class="hljs-keyword">new</span> <span class="hljs-title class_">HashSet</span>&lt;&gt;();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt;=<span class="hljs-number">10</span>; i++) &#123;<br>            hashSet.add(i+<span class="hljs-string">&quot;&quot;</span>);<br>        &#125;<br>        hashSet.add(<span class="hljs-string">&quot;hello&quot;</span>);<br>        hashSet.add(<span class="hljs-string">&quot;goof&quot;</span>);<span class="hljs-comment">//在这debug，就能进入到resize中后面那一串代码</span><br>        hashSet.add(<span class="hljs-string">&quot;qqq&quot;</span>);<br>    &#125;<br><br></code></pre></td></tr></table></figure>
 
+<hr>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><br></code></pre></td></tr></table></figure>
+
 
                 
               </div>
@@ -337,7 +338,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/java%E9%9B%86%E5%90%88/">#java集合</a>
+        <a href="/tags/java/">#java</a>
       
         <a href="/tags/%E6%BA%90%E7%A0%81/">#源码</a>
       
@@ -367,28 +368,6 @@
             
   <article id="comments" lazyload>
     
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"IHokkfy3XTpfxCzjVqoQHlJV-MdYXbMMI","appKey":"d76dVKQ78Llpu0iSbWHf37Hc","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
 
   </article>
 
@@ -511,6 +490,21 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
 
 

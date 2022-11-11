@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/ava.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="code">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="java泛型作用：可以在类声明时通过一个标识来表示类中某个属性的类型，或者是某个方法的返回值类型，或者是参数类型。就是相当于一个类型占位符。以前需要显示的指定某种数据的类型，现在可以用一个符号来代替。这样该变量的数据类型就不是固定的了！我们就可以根据实际需要，在创建对象的时候选择响应的数据类型。 1234567891011121314151617181920 	 public static voi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xy">
+<meta property="og:url" content="http://example.com/2022/11/10/java%E6%B3%9B%E5%9E%8B/index.html">
+<meta property="og:site_name" content="xy">
+<meta property="og:description" content="java泛型作用：可以在类声明时通过一个标识来表示类中某个属性的类型，或者是某个方法的返回值类型，或者是参数类型。就是相当于一个类型占位符。以前需要显示的指定某种数据的类型，现在可以用一个符号来代替。这样该变量的数据类型就不是固定的了！我们就可以根据实际需要，在创建对象的时候选择响应的数据类型。 1234567891011121314151617181920 	 public static voi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-10T09:30:07.327Z">
+<meta property="article:modified_time" content="2022-11-11T12:04:16.604Z">
+<meta property="article:author" content="code">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>xy</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":50,"cursorChar":" ","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xy~Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        code
+      </span>
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="java泛型"><a href="#java泛型" class="headerlink" title="java泛型"></a>java泛型</h3><h4 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h4><p><strong>可以在类声明时通过一个标识来表示类中某个属性的类型，或者是某个方法的返回值类型，或者是参数类型</strong>。就是相当于一个类型占位符。以前需要显示的指定某种数据的类型，现在可以用一个符号来代替。这样该变量的数据类型就不是固定的了！我们就可以根据实际需要，在创建对象的时候选择响应的数据类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"> 	 <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>  &#123;<br>      <br>			Person&lt;String&gt; person1=<span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>&lt;&gt;(<span class="hljs-string">&quot;code&quot;</span>);<br>            Person&lt;Integer&gt; person2=<span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>&lt;&gt;(<span class="hljs-number">10010</span>);<br><br>    &#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>&lt;T&gt;&#123;<br>    <span class="hljs-keyword">private</span> T t;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Person</span><span class="hljs-params">(T t)</span>&#123;<br>    <span class="hljs-built_in">this</span>.t=t;<br>&#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setT</span><span class="hljs-params">(T t)</span> &#123;<br>        <span class="hljs-built_in">this</span>.t = t;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">getT</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> t;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="声明："><a href="#声明：" class="headerlink" title="声明："></a>声明：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">interfac 接口&lt;T,R,...&gt;&#123;&#125; 和  类class 类&lt;k,v,...&gt;&#123;&#125;<br><br><span class="hljs-keyword">private</span> T[] arr=<span class="hljs-keyword">new</span> <span class="hljs-title class_">T</span>[<span class="hljs-number">10</span>];   (错误的定义)<br> <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">m</span><span class="hljs-params">(T t)</span>&#123;<br>        <span class="hljs-comment">//错误的定义</span><br>    &#125;<br>因为静态属性是和类相关关的，在类加载时候对象还没有创建，并不知道具体类型是什么。所以无法初始化。<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><p>T,E等只能是引用类型</p>
+</li>
+<li><p>在指定泛型的具体类型后，构造器可以传入该类型或者它的子类类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java">  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>  &#123;<br>    Person&lt;A&gt; person=<span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>&lt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">A</span>());<br>    Person&lt;A&gt; person2=<span class="hljs-keyword">new</span> <span class="hljs-title class_">Person</span>&lt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">B</span>());<br><br>    &#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>&#123;&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">A</span>&#123;&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>&lt;T&gt;&#123;<br>    <span class="hljs-keyword">private</span> T t;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Person</span><span class="hljs-params">(T t)</span>&#123;<br>    <span class="hljs-built_in">this</span>.t=t;<br>&#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setT</span><span class="hljs-params">(T t)</span> &#123;<br>        <span class="hljs-built_in">this</span>.t = t;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">getT</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> t;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>使用泛型的数组，不能初始化</p>
+</li>
+<li><p>静态方法中不能使用类的泛型</p>
+</li>
+</ol>
+<h4 id="泛型方法："><a href="#泛型方法：" class="headerlink" title="泛型方法："></a>泛型方法：</h4><p>修饰符 &lt;T,R,…&gt; 返回类型 方法名(参数列表){  }</p>
+<ol>
+<li><p>泛型方法<strong>可以定义在普通类中，也可以在泛型类中</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span>&lt;T,R&gt; <span class="hljs-keyword">void</span> <span class="hljs-title function_">run1</span><span class="hljs-params">(T t,R r)</span>&#123;<br>        <span class="hljs-comment">//这是一个泛型方法</span><br>    &#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run2</span><span class="hljs-params">(T t,R r)</span>&#123;<br>        <span class="hljs-comment">//这个是使用了类定义的泛型</span><br>    &#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>泛型方法，可以使用类声明的泛型，也可以使用自己声明的泛型。</p>
+</li>
+</ol>
+<h4 id="泛型的继承和通配"><a href="#泛型的继承和通配" class="headerlink" title="泛型的继承和通配:"></a>泛型的继承和通配:</h4><ol>
+<li>泛型不具备继承性</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>  &#123;<br>   Object o=<span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(<span class="hljs-string">&quot;code&quot;</span>);    <span class="hljs-comment">//T</span><br>   List&lt;Object&gt; list1=<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;String&gt;(); <span class="hljs-comment">//F 这样就是不可以的，不具备继承性</span><br>   List&lt;Object&gt; list2=<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>   list2.add(<span class="hljs-string">&quot;kkk&quot;</span>)<br> &#125;<br><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>通配符的使用</p>
+<ol>
+<li>? 表示什么类型都可以  &lt;? extends A&gt; 表示A及其子类   &lt;? super A&gt; A及其父类 </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">GrandFather</span>&#123;&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Father</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">GrandFather</span>&#123;&#125;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Son</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Father</span>&#123;&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Util</span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span>  <span class="hljs-keyword">void</span> <span class="hljs-title function_">add01</span><span class="hljs-params">(List&lt;?&gt; c)</span>&#123; <br><br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span>  <span class="hljs-keyword">void</span> <span class="hljs-title function_">add02</span><span class="hljs-params">(List&lt;? extends GrandFather&gt; c)</span>&#123;<br><br>    &#125; <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span>  <span class="hljs-keyword">void</span> <span class="hljs-title function_">add03</span><span class="hljs-params">(List&lt;? <span class="hljs-built_in">super</span> Father&gt; c)</span>&#123;<br><br>    &#125;<br>&#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        List&lt;Object&gt; object=<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        List&lt;GrandFather&gt; grandFather=<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        List&lt;Father&gt; father=<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        List&lt;Son&gt; son=<span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br><br>        Util.add01(object); <span class="hljs-comment">//每一个都可以添加</span><br>        Util.add02(father); <span class="hljs-comment">//可以添加GrandFather的子类</span><br>        Util.add03(son);   <span class="hljs-comment">//不可以，因为son不是Father的父类</span><br>        Util.add03(grandFather);   <span class="hljs-comment">//可以添加</span><br>    &#125;<br><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h3><p>文件流：</p>
+<ul>
+<li>输入和输出是以计算机内存视角来看的。从计算机内存写数据到文件（硬盘），叫输出流</li>
+<li>从文件读数据到内存，叫输入流。就是输入进来的意思。流只是个名字（emo的名字）</li>
+</ul>
+<h4 id="File-："><a href="#File-：" class="headerlink" title="File ："></a>File ：</h4><h5 id="文件操作："><a href="#文件操作：" class="headerlink" title="文件操作："></a>文件操作：</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>    <span class="hljs-comment">//这里创建的文件，它的上级目录必须存在才能创建。并且创的是文件不是目录</span><br>        <span class="hljs-type">File</span> <span class="hljs-variable">file</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;e:\\file.txt&quot;</span>);<br>        <span class="hljs-keyword">try</span> &#123;<br>            file.createNewFile();<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    <br>      <span class="hljs-comment">//常用方法</span><br>        System.out.println(<span class="hljs-string">&quot;文件名字=&quot;</span>+file.getName());<br>        System.out.println(<span class="hljs-string">&quot;文件绝对路径=&quot;</span>+file.getAbsolutePath());<br>        System.out.println(<span class="hljs-string">&quot;文件长度（字节数）=&quot;</span>+file.length());<br>        System.out.println(<span class="hljs-string">&quot;文件是否存在=&quot;</span>+file.exists());<br>        System.out.println(<span class="hljs-string">&quot;文件是不是个目录=&quot;</span>+file.isDirectory());<br>        System.out.println(<span class="hljs-string">&quot;文件是不是个文件=&quot;</span>+file.isFile());<br>     	System.out.println(<span class="hljs-string">&quot;文件是否删除成功=&quot;</span>+file.delete());  <span class="hljs-comment">//只能删除空目录或者单个文件</span><br>    <br>    <span class="hljs-comment">//目录操作</span><br>    	<span class="hljs-type">File</span> <span class="hljs-variable">file</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>(<span class="hljs-string">&quot;e:\\file\\file02\\file03&quot;</span>);<br>        <span class="hljs-keyword">if</span> (file.exists())&#123;<br>            System.out.println(<span class="hljs-string">&quot;目录已经存在&quot;</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (!file.mkdirs()) &#123;<br>            System.out.println(<span class="hljs-string">&quot;创建失败&quot;</span>);<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="Io流："><a href="#Io流：" class="headerlink" title="Io流："></a>Io流：</h4><p>按照操作数据的单位不同，分为字节流（8bit）,字符流。从效率上来说，字符流一次读取的数据更多。但是在对于二进制文件，比如声音视频这种，字节流可以保证无损操作。而字符流用来读取文本文件时则更为适合</p>
+<table>
+<thead>
+<tr>
+<th align="center">抽象基类</th>
+<th align="center">字节流</th>
+<th align="center">字符流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">输入流</td>
+<td align="center">InputStream</td>
+<td align="center">Reader</td>
+</tr>
+<tr>
+<td align="center">输出流</td>
+<td align="center">OutputSteram</td>
+<td align="center">Writer</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a><span>Code</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
