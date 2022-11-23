@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/ava.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="code">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="docekr安装，镜像，容器，Dockerfile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker入门">
+<meta property="og:url" content="http://example.com/docker%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="xy">
+<meta property="og:description" content="docekr安装，镜像，容器，Dockerfile">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/blogImg/dockerAli01.png">
+<meta property="og:image" content="http://example.com/blogImg/dockerAli02.png">
+<meta property="og:image" content="http://example.com/blogImg/dockerAli03.png">
+<meta property="article:published_time" content="2022-11-15T03:31:52.311Z">
+<meta property="article:modified_time" content="2022-11-17T09:03:07.506Z">
+<meta property="article:author" content="code">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/blogImg/dockerAli01.png">
+  
+  
+  
+  <title>docker入门 - xy</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":50,"cursorChar":" ","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xy~Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blogImg/cotent-banner03.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="docker入门"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        code
+      </span>
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">docker入门</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/">docker官网地址</a></p>
+<h4 id="基本组成："><a href="#基本组成：" class="headerlink" title="基本组成："></a>基本组成：</h4><ul>
+<li>镜像：类似于类模板</li>
+<li>容器: 类似于一个实例对象 就是用镜像run出来的一个一个的实例（类似于java类，new出来一个容器对象）。这个容器包括了需要运行的各种环境。从镜像容器角度看，容器相当于一个简易版的linux环境＋运行在其中的应用程序。</li>
+<li>仓库：就是用来集中存放各种镜像的地方，需要的时候拉下来就行</li>
+</ul>
+<blockquote>
+<p>1.理解docker的概念是很重要的。镜像就是一个模板，可以使用这个模板创建不同的实例。相当于：镜像 实例1=new 镜像()；镜像 实例2=new 镜像()。</p>
+<p>2.关于下面的各种容器的创建，命令等。除了tomcat8没有远程连接测试之外，其它的配置文件和命令都亲测可用。但是用的linux是远程的云服务器，不是虚拟机！文章内容基于尚硅谷docker教程。</p>
+</blockquote>
+<h1 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="centos7上安装："><a href="#centos7上安装：" class="headerlink" title="centos7上安装："></a>centos7上安装：</h3><p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/">docker官网地址</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell">//从上往下直接复制就行<br>yum -y install gcc<br>yum -y install gcc-c++   //注意这里的-是连着的，没有空格<br>yum install -y yum-utils<br>yum-config-manager  --add-repo  http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo   //设置阿里云镜像<br>yum makecache fast<br>yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin<br><br>//启动docker <br>systemctl start docker<br>//执行这个命令，测试有没有hello word输出。多等一下，因为第一次本地没有<br>docker run hello-world<br></code></pre></td></tr></table></figure>
+
+<h3 id="配置阿里云加速："><a href="#配置阿里云加速：" class="headerlink" title="配置阿里云加速："></a>配置阿里云加速：</h3><ol>
+<li>注册一个阿里云账号：<a target="_blank" rel="noopener" href="https://www.aliyun.com/product/acr?spm=5176.166170.J_3207526240.15.478d5164AJqJOA">阿里云地址：容器镜像服务_镜像构建_镜像授权_镜像托管-阿里云 (aliyun.com)</a></li>
+<li>找到容器镜像服务：</li>
+</ol>
+<p><img src="/blogImg/dockerAli01.png" srcset="/img/loading.gif" lazyload alt="image-20221114211646164"></p>
+<ol start="3">
+<li><p>直接点击管理控制台，不要点购买</p>
+<p><img src="/blogImg/dockerAli02.png" srcset="/img/loading.gif" lazyload alt="image-20221114212020823"></p>
+</li>
+<li><p>在实例列表里面创建个人版</p>
+</li>
+<li><p>进入镜像工具-镜像加速器-CentOs，把下面内容粘贴（可能markdowan有格式问题，可以去官网复制）</p>
+<p><img src="/blogImg/dockerAli03.png" srcset="/img/loading.gif" lazyload alt="image-20221114212246829"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo mkdir -p /etc/docker<br>sudo tee /etc/docker/daemon.json &lt; &lt; -&#x27;EOF&#x27;<br>&#123;<br>  &quot;registry-mirrors&quot;: [&quot;https://wglvozsd.mirror.aliyuncs.com&quot;]<br>&#125;<br>EOF<br>sudo systemctl daemon-reload<br>sudo systemctl restart docker<br></code></pre></td></tr></table></figure></li>
+<li><p>systemctl status docker               //查看docker状态</p>
+</li>
+</ol>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="docker命令："><a href="#docker命令：" class="headerlink" title="docker命令："></a>docker命令：</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell">启动docker: systemctl start docker<br>停止docker: systemctl stop docker<br>重启docker：systemctl restart docker<br>查看docker状态: systemctl status docker <br>开机自启动: systemctl enable docker<br>查看概要信息：docker info<br>查看总体帮助文档：docker --help   <br>某一条命令帮助文档： docker 具体命令 --help<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="镜像命令："><a href="#镜像命令：" class="headerlink" title="镜像命令："></a>镜像命令：</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">                	name的前缀表示由于不同的组织发布的，official表示是否官方认证过的  <br>docker images   	查看本地的镜像,注意是镜像，不是容器实例。 TAG表示镜像的标签版本号 使用镜像时候不指定Tag默认就是最新的版本<br>docker images -a   	列出本地所以镜像 包括历史版本<br>docker images -q    只显示镜像ID<br>docker search redis（某个镜像的名字）  		搜索镜像  <br>docker search --limit 5 redis  			  指定只看前几条数据，以star的数量排序<br><br>docker pull 镜像名字[:TAG]                 拉取镜像<br>docker pull redis:6.0.8<br>docker system df					查看镜像/容器/数据卷占用的空间<br>docker rmi  ID/容器名字               根据id或者名字删除镜像<br>docker rmi -f 16ecd2772934  		-f 强制删除镜像 <br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>docekr的虚悬镜像指：REPOSITORY和TAG都为<none>的镜像</p>
+<p>docker image ls -f dangling=true 查看所有虚悬镜像</p>
+</blockquote>
+<h3 id="容器命令："><a href="#容器命令：" class="headerlink" title="容器命令："></a>容器命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull ubuntu           		下载一个ubuntu镜像<br>docker run -it ubuntu /bin/bash		创建一个ubuntu容器实例，是实例！！相对于在docker装了个ubuntu系统，但只包含内核。如vim就没有<br>	-it： 表示会返回一个终端输入，因为你启动了ubuntu之后，是有一个命令交互窗口来使用这个ubuntu吧<br>    -d:   表示后台运行容器（比如redis这种），it是前台类型。<br>    -p:   指定端口映射.因为访问docker内部的容器（如redis），需要先经过docker，在到redis<br>docker run -it --name=ubuntu  ubuntu  /bin/bash   指定容器的名字，不指定会随机分配（最好指定）<br>docker run -d --name=redis redis 				  创建一个redis实例<br><br><br>docker ps 							显示容器实例<br>	-a：列出当前所有正在运行的实例和历史运行过的<br>	-I：显示最近创建的容器<br>	-n：显示最近创建的n个<br>	-q：静默模式，只显示容器编号<br>	<br><br><span class="hljs-built_in">exit</span> 		退出容器。容器已经停止了<br>crl+p+q		退出容器，后台还在运行<br>docker <span class="hljs-built_in">exec</span> -it 容器ID /bin/bash    重新进入容器,（容器没有停止）<br><br>docker start 容器ID/容器名字			启动已经停止的容器<br>docker restart 容器ID/容器名字	     重启<br>docker stop   容器ID/容器名字	         停止<br>docker <span class="hljs-built_in">kill</span>    容器ID/容器名字	     强制停止<br>docker <span class="hljs-built_in">rm</span>  容器ID/容器名字         删除已停止的容器（-f 强制）加i为删除镜像<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"> docker inspect 容器ID    进入正在运行的容器并以命令进行交互<br> docker <span class="hljs-built_in">exec</span>/attach -it  容器<span class="hljs-built_in">id</span>  bashShell   <br> 		attach：直接进入容器终端，不会启动新的进程，用<span class="hljs-built_in">exit</span>退出容器会停止<br> 		<span class="hljs-built_in">exec</span>：打开的是新的终端，启动新的进程，<span class="hljs-built_in">exit</span>退出容器不会停止<br>如：	<br>  docker <span class="hljs-built_in">exec</span> -it 1190c106fda3  /bin/bash      进入redis容器<br>  redis-cli -p 6379			开启一个客户端<br>  <span class="hljs-built_in">set</span> k1 v1                 成功<br><br><br>docker <span class="hljs-built_in">cp</span> 容器<span class="hljs-built_in">id</span>：容器内路径  目的主机路径       从容器内拷贝文件<br>docker <span class="hljs-built_in">export</span> 容器ID &gt; 文件名字.tar		    导出容器内容作为一个tar归档文件<br><span class="hljs-built_in">cat</span> 文件名.tar | docker import - 镜像用户/镜像名字：镜像版本号       将tar包内容变成一个镜像（接下来就可以使用这个镜像了）<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>redis服务端只会接收来自客户端的命令，因为在redis启动时候，也是开启一个伪客户端来发送命令实现数据恢复的  参照《redis设计与实现》</p>
+</blockquote>
+<h2 id="Docker-镜像"><a href="#Docker-镜像" class="headerlink" title="Docker 镜像"></a>Docker 镜像</h2><p>是什么：</p>
+<p>分层的镜像：</p>
+<p>UnionFS（联合文件系统）：</p>
+<p>镜像加载原理</p>
+<p>为什么分层：</p>
+<p><strong>Docker镜像层都是只读的，容器层是可写的。当容器启动时候，一个新的可写层被加载到镜像的顶部。这一层通常被称为“容器层”。容器层之下的都叫“镜像层”</strong></p>
+<h3 id="Commit命令："><a href="#Commit命令：" class="headerlink" title="Commit命令："></a>Commit命令：</h3><p>从上面我们可以得知，ubuntu只包含了最需要的内核。比如vim就没有。而我们可以自己在创建的容器中安装vim，然后把这个安装了vim的容器变成一个新的镜像，这样以后我们通过这个新的镜像创建出来的容器就具有了vim的功能.这就是复用,分层。需要什么，我们就加什么，加了之后以后就可以生成一个自定义的镜像，使用这个镜像就能创具有出自定义功能的实例。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell">apt-get update        	更新包管理工具（ubuntu系统）<br>apt-get -y install vim  安装vim<br>vim a.txt 				这时候就可以使用vim了<br>docker commit -m=&quot;提交的描述信息&quot; -a=&quot;作者&quot; 容器ID  要创建的目标镜像名字：标签名<br><br>docker ps 			先查看一下容器ID<br>docker commit -m=&quot;具有vim的ubuntu&quot; -a=&quot;atiguigu&quot; f0f78f34f242  atguigu/myubuntu:1.3    （）<br>docker images       可以看到有一个新的image镜像，名字叫atguigu/myubuntu，而且大小变成了180M<br>docker run -it d90677247fd6 /bin/bash    创建这个心镜像的名字，输入<br>cat  a.txt      命令可以正常使用（如果上面创建了a.txt,里面有内容，这里会输出内容）<br><br><br></code></pre></td></tr></table></figure>
+
+<h3 id="发布镜像到阿里云"><a href="#发布镜像到阿里云" class="headerlink" title="发布镜像到阿里云"></a>发布镜像到阿里云</h3><ol>
+<li><p>打开上面容器镜像的控制台。进入实例列表。点击个人实例</p>
+</li>
+<li><p>创建一个命名空间，仓库类型设置为公开（类似于一个包名）</p>
+</li>
+<li><p>点击镜像仓库，创建一个镜像仓库。名字自取</p>
+</li>
+<li><p>点击仓库名称，可以看到一个操作指南。找到第三步，将镜像推送到registry，直接复制，修改为自己的镜像tag等。需要知道自己的阿里云名字，仓库名字，所以要去去阿里云自己复制。拉取时候我们可以看见只用填版本号。所以一个镜像仓库应该是对应一种镜像的不同版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell">//推送commit。<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker login --username=随便打个名字111 registry.cn-zhangjiakou.aliyuncs.com</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker tag [ImageId] registry.cn-zhangjiakou.aliyuncs.com/ciyx/myubuntu:[镜像版本号]</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker push registry.cn-zhangjiakou.aliyuncs.com/ciyx/myubuntu:[镜像版本号]</span><br><br>//登录<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker login --username=随便打个名字111 registry.cn-zhangjiakou.aliyuncs.com</span><br>//拉取<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">docker pull registry.cn-zhangjiakou.aliyuncs.com/ciyx/myubuntu:[镜像版本号]</span><br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="推送到私有云："><a href="#推送到私有云：" class="headerlink" title="推送到私有云："></a>推送到私有云：</h3><p>由于网络原因：需要的请参考尚硅谷视频：（docker教程天花板）<a target="_blank" rel="noopener" href="https://b23.tv/uT8Uz1q">https://b23.tv/uT8Uz1q</a></p>
+<hr>
+<h2 id="docker容器数据卷"><a href="#docker容器数据卷" class="headerlink" title="docker容器数据卷"></a>docker容器数据卷</h2><h3 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h3><p>卷就是目录或文件，存在于一个或多个容器中，由docker挂载到容器，但不属于联合文件系统，因此能够绕过Union File System。提供一些用于持续存储或共享数据的特性：卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂载的数据卷。就是指定一个文件映射关系，将容器内的数据持久化到主机上的磁盘中。类似于redis的aop和aof，这样即使容器被删了，数据也可以重新恢复</p>
+<h3 id="设置："><a href="#设置：" class="headerlink" title="设置："></a>设置：</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it --privileged=true -v /宿主机绝对路径目录:/容器内目录  镜像名字<br>		-it：前台启动<br>		--privileged=true 设置为root访问权限，防止某些目录没有操作权限<br>docker run -it --privileged=true -v /宿主机绝对路径目录:/容器内目录:ro  镜像名字<br>		:ro表示容器只能读宿主机文件信息，不能写文件。<br>docker inspect 容器ID  	查看容器信息，如果挂载成功，里面的Mounts属性显示了数据卷的映射关系<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h3><ol>
+<li><p>数据卷可在容器之间共享或重用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it --privileged=true --volumes- from 父容器  子容器名字<br>如果父容器挂了，子容器数据卷并不会有影响，因为继承的是挂载的规则。<br>如果父容器重启，会继续使用这个挂载<br></code></pre></td></tr></table></figure></li>
+<li><p>容器中更改可以直接实时生效，自动备份到数据卷中，不用人为的cp。主机目录下新建的文件数据会被同步到容器，容器建立的文件也会同步到宿主主机是一个双向的备份。如果容器停了，但是宿主机还在新增数据，容器重启后数据还是会同步！！</p>
+</li>
+<li><p>数据卷中的更改不会包括在镜像的更新中</p>
+</li>
+<li><p>数据卷的生命周期一直持续到没有容器使用为止</p>
+</li>
+</ol>
+<h2 id="docker常规的软件安装"><a href="#docker常规的软件安装" class="headerlink" title="docker常规的软件安装"></a>docker常规的软件安装</h2><h3 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker pull billygoo/tomcat8-jdk8   安装8.0版本<br>docker run -it -p 8080:8080  --name=tomcat  billygoo/tomcat8-jdk8     启动（以前台方式）<br>		   -d: 后台启动<br>如果是云服务器，就访问ip：8080看看是否有tomcat主页。记得去云控制台开放端口。最新版的tomcat需要修改一些东西，所以请下载tomcat8<br><br>docker exec -it  a0c1e994a083   /bin/bash   进入tomcat的根目录<br></code></pre></td></tr></table></figure>
+
+<h3 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h3><p>简单版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker pull mysql:5.7<br>docker run -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7       因为自己服务器已经开过mysql了，所以这里开3307<br>docker exec -it c877679e1900 /bin/bash   进入控制台<br>mysql -uroot -p    连接mysql<br><br>用本地navicat连接测试，云服务器的记得开安全组，端口就是上面写的3307。创建一个表，插入带有中文的数据，会有乱码<br><br>show variables like &#x27;character%&#x27;；   在docker容器中的mysql控制台，查看编码，是拉丁文。所以要设置一下（不能再本地navicat上查看）<br> <br> <br></code></pre></td></tr></table></figure>
+
+<p>正式版：因为上面没有设置容器卷，会有数据丢失问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shel"><br>docker run -p 3307:3306 --name mysql \<br>--privileged=true -v /mydata/mysql/log:/var/log/mysql \<br>-v /mydata/mysql/data:/var/lib/mysql \<br>-v /mydata/mysql/conf:/etc/mysql \<br>-e MYSQL_ROOT_PASSWORD=123456 \<br>-d mysql:5.7<br><br><br>#进入conf目录，新建配置文件，通过这个配置文件传递给docker中的mysql解决乱码（不知道8.0有没有）<br>vim my.cnf   填入下面的内容<br><br>[client]<br>default_character_set=utf8<br>[mysqld]<br>collation_server=utf8_general_ci<br>character_set_server=utf8<br><br>重启mysql<br>docker restart mysql<br></code></pre></td></tr></table></figure>
+
+<h3 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker pull redsi:6.0.8     没有镜像稍等一下，它会自己下载<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment"># 创建目录</span></span><br>mkdir -p /home/redis/conf<br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment"># 创建文件</span></span><br>touch /home/redis/conf/redis.conf<br><span class="hljs-meta prompt_">#</span><span class="language-bash">下面是run命令，直接复制 \表示换行</span><br>docker run \<br>--privileged=true --name redis \<br>-p 6379:6379 \<br>-v /home/redis/data:/data \<br>-v /home/redis/conf/redis.conf:/etc/redis/redis.conf \<br>-d redis:6.0.8 \<br>redis-server /etc/redis/redis.conf <br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">ps：</span><br>http://download.redis.io/redis-stable/  redis的配置文件下载，然后呢把文件内容复制到/home/redis/conf/redis.conf里面<br>这个redsi.conf好像是已经修改好了的，直接使用就用。在本地用一个redis客户端连接一下，成功！！！<br><br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h1><h2 id="docker复杂安装"><a href="#docker复杂安装" class="headerlink" title="docker复杂安装"></a>docker复杂安装</h2><p>跳过redis和mysql的主从复制安装，需要的观看尚硅谷教程：</p>
+<p>【尚硅谷2022版Docker实战教程（docker教程天花板）-哔哩哔哩】 <a target="_blank" rel="noopener" href="https://b23.tv/IEwZA1H">https://b23.tv/IEwZA1H</a></p>
+<h2 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h2><h3 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h3><p>Dockerfile是用来构建Docker镜像的文本文件，是由一条条构建镜像所需的指令和参数构成的脚本。类似于commit。</p>
+<ol>
+<li>每条保留字指令都必须为大写字母且后面要跟随至少一个参数</li>
+<li>指令按照从上到下，顺序执行</li>
+<li>#表示注释</li>
+<li>每条指令都会创建一个新的镜像层并对镜像进行提交</li>
+</ol>
+<h3 id="大致流程："><a href="#大致流程：" class="headerlink" title="大致流程："></a>大致流程：</h3><p>（1）docker从基础镜像运行一个容器</p>
+<p>（2）执行一条指令并对容器作出修改</p>
+<p>（3）执行类似docker commit的操作提交一个新的镜像层</p>
+<p>（4）docker再基于刚提交的镜像运行一个新容器</p>
+<p>（5）执行dockerfile中的下一条指令直到所有指令都执行完成</p>
+<h3 id="常用保留字指令："><a href="#常用保留字指令：" class="headerlink" title="常用保留字指令："></a>常用保留字指令：</h3><p>FROM：基础镜像，当前新镜像是基于哪个镜像的，指定一个已经存在的镜像作为模板，第一条必须是from</p>
+<p>MAINTAINER：镜像维护者的姓名和邮箱地址</p>
+<p>RUN：容器构建时需要运行的命令。shell格式，exec格式。RUN是在 docker build时运行</p>
+<p>EXPOSE：当前容器对外暴露出的端口</p>
+<p>WORKDIR：指定在创建容器后，终端默认登陆的进来工作目录，一个落脚点</p>
+<p>USER：指定该镜像以什么样的用户去执行，如果都不指定，默认是root</p>
+<p>ENV:用来在构建镜像过程中设置环境变量. ENV MY_PATH /usr/mytest这个环境变量可以在后续的任何RUN指令中使用，这就如同在命令前面指定了环境变量    前缀一样；也可以在其它指令中直接使用这些环境变量， 比如：WORKDIR $MY_PATH</p>
+<p>ADD:将宿主机目录下的文件拷贝进镜像且会自动处理URL和解压tar压缩包，类似copy加解压</p>
+<p>COPY:类似ADD，拷贝文件和目录到镜像中。将从构建上下文目录中 &lt;源路径&gt; 的文件/目录复制到新的一层的镜像内的 &lt;目标路径&gt; 位置</p>
+<p>VOLUME:容器数据卷，用于数据保存和持久化工作</p>
+<p>CMD：Dockerfile 中可以有多个 CMD 指令，但只有最后一个生效，CMD 会被 docker run 之后的参数替换。Dockerfile 中可以有多个 CMD 指令，但只    有最后一个生效，CMD 会被 docker run 之后的参数替换。CMD是在docker run 时运行。ENTRYPOINT：类似于 CMD 指令，但是ENTRYPOINT不会被    docker run后面的命令覆盖，而且这些命令行参数会被当作参数送给 ENTRYPOINT 指令指定的程序。</p>
+<table>
+<thead>
+<tr>
+<th>是否传参</th>
+<th>按照dockerfile编写执行</th>
+<th>传参运行</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Docker命令</td>
+<td>docker run nginx:test</td>
+<td>docker run nginx:test -c /etc/nginx/new.conf</td>
+</tr>
+<tr>
+<td>衍生出的实际命令</td>
+<td>nginx -c /etc/nginx/nginx.conf</td>
+<td>nginx -c /etc/nginx/new.conf</td>
+</tr>
+</tbody></table>
+<h3 id="构建一个自己的centos："><a href="#构建一个自己的centos：" class="headerlink" title="构建一个自己的centos："></a>构建一个自己的centos：</h3><ul>
+<li>安装jdk8,vim,ipconfig</li>
+</ul>
+<p>jdk-8u171-linux-x64.tar.gz下载：<a target="_blank" rel="noopener" href="https://mirrors.yangxingzhen.com/jdk/">https://mirrors.yangxingzhen.com/jdk/</a> </p>
+<ol>
+<li>创建一个目录，里面新建一个Dockerfile文件，只能是这个名字。把下载的jdk包放在同级文件夹下</li>
+<li>编辑 Dockerfile，粘贴下面代码 </li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">这里要拉取7版本的centos才行，不是的先docker pull centos:7。</span><br> FROM centos:7<br> MAINTAINER code<br> ENV MYPATH /usr/local<br> WORKDIR $MYPATH <br><span class="hljs-meta prompt_"> #</span><span class="language-bash">安装vim编辑器。Run就是运行后面的这个命令</span><br> RUN yum -y install vim<br><span class="hljs-meta prompt_"> #</span><span class="language-bash">安装ifconfig命令查看网络IP</span><br> RUN yum -y install net-tools<br><span class="hljs-meta prompt_"> #</span><span class="language-bash">安装java8及lib库,一个必备操作</span><br> RUN yum -y install glibc.i686<br> RUN mkdir /usr/local/java<br><span class="hljs-meta prompt_"> #</span><span class="language-bash">ADD 是相对路径jar,把jdk-8u171-linux-x64.tar.gz添加到容器中,安装包必须要和Dockerfile文件在同一位置</span><br> ADD jdk-8u171-linux-x64.tar.gz /usr/local/java/<br><span class="hljs-meta prompt_"> #</span><span class="language-bash">配置java环境变量</span><br> ENV JAVA_HOME /usr/local/java/jdk1.8.0_171<br> ENV JRE_HOME $JAVA_HOME/jre<br> ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH<br> ENV PATH $JAVA_HOME/bin:$PATH <br> EXPOSE 80 <br><span class="hljs-meta prompt_"> #</span><span class="language-bash">上面说的多个CMD只有最后一个生效是在运行阶段，这里只是build阶段，所以三个都会生效</span><br> CMD echo $MYPATH<br> CMD echo &quot;success--------------ok&quot;<br> CMD /bin/bash <br> <br> <br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>执行构建命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">centosjava8是自定义镜像名字，:后面是版本号。名字好像只能是小写。注意命令最后有个点</span><br>docker build -t centosjava8:1.5 .<br><br></code></pre></td></tr></table></figure></li>
+<li><p>最后看到successfully就OK</p>
+</li>
+<li><p>docker images 查看生成的镜像。然后启动</p>
+</li>
+<li><p>测试vim，ipconfig，java -version 。全部成功。</p>
+</li>
+</ol>
+<h3 id="发布boot："><a href="#发布boot：" class="headerlink" title="发布boot："></a>发布boot：</h3><ol>
+<li>本地新建一个最简单的boot项目，不包含数据库和redsi。测试成功后打包上传到服务器。和Dockerfile放在同一个文件夹</li>
+<li>填入下面内容。dockerBoot-0.0.1-SNAPSHOT.jar是我的jar名称</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">基础镜像使用java</span><br>FROM java:8<br><span class="hljs-meta prompt_"># </span><span class="language-bash">作者</span><br>MAINTAINER zzyy<br><span class="hljs-meta prompt_"># </span><span class="language-bash">VOLUME 指定临时文件目录为/tmp，在主机/var/lib/docker目录下创建了一个临时文件并链接到容器的/tmp</span><br>VOLUME /tmp<br><span class="hljs-meta prompt_"># </span><span class="language-bash">将jar包添加到容器中并更名为zzyy_docker.jar</span><br>ADD dockerBoot-0.0.1-SNAPSHOT.jar zzyy_docker.jar<br><span class="hljs-meta prompt_"># </span><span class="language-bash">运行jar包</span><br>RUN bash -c &#x27;touch /zzyy_docker.jar&#x27;<br>ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/zzyy_docker.jar&quot;]<br><span class="hljs-meta prompt_">#</span><span class="language-bash">暴露8888端口</span><br>EXPOSE 8888 <br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">生成镜像</span><br>docker build -t zzyy_docker.jar:1.6 .   <br><span class="hljs-meta prompt_">#</span><span class="language-bash">运行实例</span><br>docker run -d -p 8001:8888  1bdc37d39ec1 <br><span class="hljs-meta prompt_">#</span><span class="language-bash">访问ip，返回测试数据，成功。记得开放8001.8001是对外暴露的，8888是在docker容器内部的。</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker-Compose"></a>Docker-Compose</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。</p>
+<p> docker建议我们每一个容器中只运行一个服务,因为docker容器本身占用资源极少,所以最好是将每个服务单独的分割开来但是这样我们又面临了一个问题？ 如果我需要同时部署好多个服务,难道要每个服务单独写Dockerfile然后在构建镜像,构建容器,这样累都累死了,所以docker官方给我们提供了docker-compose多服务部署的工具 例如要实现一个Web微服务项目，除了Web服务容器本身，往往还需要再加上后端的数据库mysql服务容器，redis服务器，注册中心eureka，甚至还包括负载均衡容器等等。。。。。。 Compose允许用户通过一个单独的docker-compose.yml模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。 可以很容易地用一个配置文件定义一个多容器的应用，然后使用一条指令安装这个应用的所有依赖，完成构建。Docker-Compose 解决了容器与容器之间如何管理编排的问题。</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>文档：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/compose-file-v3/">https://docs.docker.com/compose/compose-file/compose-file-v3/</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">傻瓜式安装，三个命令依次复制。因为github原因，很慢或者超时，耐心等待。新版的好像自带了compose，可以百度一下</span><br>curl -L &quot;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&quot; \<br>-o /usr/local/bin/docker-compose<br><br>chmod +x /usr/local/bin/docker-compose<br><br>docker-compose --version <br><span class="hljs-meta prompt_">#</span><span class="language-bash">出现docker-compose version 1.29.2, build 5becea4c就证明成功了</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h3><ol>
+<li>编写Dockerfile定义各个微服务应用并构建出对应的镜像文件</li>
+<li>使用 docker-compose.yml 定义一个完整业务单元，安排好整体应用中的各个容器服务。</li>
+<li>最后，执行docker-compose up命令 来启动并运行整个应用程序，完成一键部署上线</li>
+</ol>
+<p>写不下去了，命令很烦。而且主要是要自己会写dockerfile和compose命令，但是根本不会写，只看得懂。剩下给个传送门吧：</p>
+<p>【尚硅谷2022版Docker实战教程（docker教程天花板）-哔哩哔哩】<a target="_blank" rel="noopener" href="https://b23.tv/Jz7G4CS">https://b23.tv/Jz7G4CS</a></p>
+<p>docker-compose.yml文件（尚硅谷的）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">version:</span> <span class="hljs-string">&quot;3&quot;</span><br><br><span class="hljs-attr">services:</span><br> <span class="hljs-attr">microService:</span><br>   <span class="hljs-attr">image:</span> <span class="hljs-string">zzyy_docker:1.6</span><br>   <span class="hljs-attr">container_name:</span> <span class="hljs-string">ms01</span><br>   <span class="hljs-attr">ports:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;6001:6001&quot;</span><br>   <span class="hljs-attr">volumes:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">/app/microService:/data</span><br>   <span class="hljs-attr">networks:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span><br>   <span class="hljs-attr">depends_on:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">redis</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">mysql</span><br>    <br> <span class="hljs-attr">redis:</span><br>   <span class="hljs-attr">image:</span> <span class="hljs-string">redis:6.0.8</span><br>   <span class="hljs-attr">ports:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;6379:6379&quot;</span><br>   <span class="hljs-attr">volumes:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">/app/redis/redis.conf:/etc/redis/redis.conf</span>    <br>     <span class="hljs-bullet">-</span> <span class="hljs-string">/app/redis/data:/data</span>   <br>   <span class="hljs-attr">networks:</span><br>     <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span>    <br>   <span class="hljs-attr">command:</span> <span class="hljs-string">redis-server</span> <span class="hljs-string">/etc/redis/redis.conf</span><br>                                                  <br> <span class="hljs-attr">mysql:</span>   <br>   <span class="hljs-attr">image:</span> <span class="hljs-string">mysql:5.7</span><br>   <span class="hljs-attr">environment:</span>      <br>     <span class="hljs-attr">MYSQL_ROOT_PASSWORD:</span> <span class="hljs-string">&#x27;123456&#x27;</span><br>     <span class="hljs-attr">MYSQL_ALLOW_EMPTY_PASSWORD:</span> <span class="hljs-string">&#x27;no&#x27;</span><br>     <span class="hljs-attr">MYSQL_DATABASE:</span> <span class="hljs-string">&#x27;db2021&#x27;</span>  <br>     <span class="hljs-attr">MYSQL_USER:</span> <span class="hljs-string">&#x27;zzyy&#x27;</span>     <br>     <span class="hljs-attr">MYSQL_PASSWORD:</span> <span class="hljs-string">&#x27;zzyy123&#x27;</span>   <br>   <span class="hljs-attr">ports:</span>      <br>        <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;3306:3306&quot;</span>   <br>   <span class="hljs-attr">volumes:</span>     <br>        <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/db:/var/lib/mysql</span>    <br>        <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/conf/my.cnf:/etc/my.cnf</span>    <br>        <span class="hljs-bullet">-</span> <span class="hljs-string">/app/mysql/init:/docker-entrypoint-initdb.d</span>  <br>   <span class="hljs-attr">networks:</span>      <br>     <span class="hljs-bullet">-</span> <span class="hljs-string">atguigu_net</span><br>   <span class="hljs-attr">command:</span> <span class="hljs-string">--default-authentication-plugin=mysql_native_password</span>   <span class="hljs-comment">#解决外部无法访问 networks:    atguigu_net:</span><br>   <br></code></pre></td></tr></table></figure>
+
+<h2 id="Portainer安装"><a href="#Portainer安装" class="headerlink" title="Portainer安装"></a>Portainer安装</h2><p>就是个可视化监控工具，可以不用写命令就启动容器。能监控服务器上的资源使用情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d -p 8000:8000 -p 9000:9000 --name portainer --restart=always -v \<br>/var/run/docker.sock:/var/run/docker.sock  \<br>-v portainer_data:/data  \<br>portainer/portainer <br><br>登录xxx.xxx.xxx.xxx:9000访问。<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/docker/">#docker</a>
+      
+        <a href="/tags/%E5%9F%BA%E7%A1%80/">#基础</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/maven/" title="Maven">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Maven</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/java%E5%9F%BA%E7%A1%80/" title="java基础">
+                        <span class="hidden-mobile">java基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a><span>Code</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
